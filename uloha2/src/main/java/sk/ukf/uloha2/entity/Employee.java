@@ -1,42 +1,64 @@
+
 package sk.ukf.uloha2.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "employee")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "first_name")
+    @NotBlank(message = "Meno je povinné.")
+    @Size(min = 2, max = 50, message = "Meno musí mať 2-50 znakov")
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name="last_name")
+    @NotBlank(message = "Priezvisko je povinné.")
+    @Size(min = 2, max = 50, message = "Priezvisko musí mať 2-50 znakov")
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
 
-    @Column(name="birth_date")
+    @NotNull(message = "Dátum narodenia je povinný.")
+    @Past(message = "Dátum narodenia musí byť v minulosti.")
+    @Column(name = "birth_date")
     private Date birthDate;
 
+    @NotBlank(message = "Email je povinný.")
+    @Pattern(
+            regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$",
+            message = "Email nemá správny formát."
+    )
     @Column(name = "email")
     private String email;
 
-    @Column(name="phone")
+    @Pattern(
+            regexp = "^(\\+421|0)9[0-9]{8}$",
+            message = "Telefónne číslo musí byť v správnom formáte."
+    )
+    @Column(name = "phone")
     private String phone;
 
-    @Column(name="job_title")
+    @NotBlank(message = "Pracovná pozícia je povinná.")
+    @Size(min = 2, max = 50, message = "Pracovná pozícia musí mať 2-50 znakov.")
+    @Column(name = "job_title")
     private String jobTitle;
 
-    @Column(name="salary")
+    @NotNull(message = "Plat je povinný.")
+    @PositiveOrZero(message = "Plat nemôže byť záporný.")
+    @Column(name = "salary")
     private Integer salary;
 
-    @Column(name="full_time")
+    @Column(name = "full_time")
     private boolean fullTime;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
